@@ -7,7 +7,7 @@ import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 
 interface IndexPageProps {
-  nodes: DrupalNode[]
+  nodes: DrupalNode[];
 }
 
 export default function IndexPage({ nodes }: IndexPageProps) {
@@ -37,9 +37,8 @@ export default function IndexPage({ nodes }: IndexPageProps) {
   )
 }
 
-export async function getStaticProps(
-  context
-): Promise<GetStaticPropsResult<IndexPageProps>> {
+export async function getStaticProps( context): Promise<GetStaticPropsResult<IndexPageProps>> {
+  
   const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
     "node--article",
     context,
@@ -52,6 +51,8 @@ export async function getStaticProps(
       },
     }
   )
+
+
 
   return {
     props: {

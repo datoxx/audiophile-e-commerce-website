@@ -6,8 +6,9 @@ import { drupal } from "lib/drupal"
 import { NodeArticle } from "components/node--article"
 import { NodeBasicPage } from "components/node--basic-page"
 import { Layout } from "components/layout"
+import NodeEarphone from '../components/node--earphone';
 
-const RESOURCE_TYPES = ["node--page", "node--article"]
+const RESOURCE_TYPES = ["node--page", "node--article", "node--earphone"]
 
 interface NodePageProps {
   resource: DrupalNode
@@ -24,6 +25,8 @@ export default function NodePage({ resource }: NodePageProps) {
       </Head>
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} />}
+      {resource.type === "node--earphone" && <NodeEarphone node={resource} />}
+
     </Layout>
   )
 }
@@ -35,9 +38,8 @@ export async function getStaticPaths(context): Promise<GetStaticPathsResult> {
   }
 }
 
-export async function getStaticProps(
-  context
-): Promise<GetStaticPropsResult<NodePageProps>> {
+export async function getStaticProps(context): Promise<GetStaticPropsResult<NodePageProps>> {
+
   const path = await drupal.translatePathFromContext(context)
 
   if (!path) {
@@ -52,6 +54,12 @@ export async function getStaticProps(
   if (type === "node--article") {
     params = {
       include: "field_image,uid",
+    }
+  }
+
+  if (type === "node--earphone") {
+    params = {
+      include: "field_product_header,field_product_header.field_image",
     }
   }
 
