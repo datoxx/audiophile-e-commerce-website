@@ -6,9 +6,11 @@ import { drupal } from "lib/drupal"
 import { NodeArticle } from "components/node--article"
 import { NodeBasicPage } from "components/node--basic-page"
 import { Layout } from "components/layout"
-import NodeEarphone from '../components/node--earphone';
+import NodeEarphone from '../components/node/node--earphone';
+import NodeSpeaker from '../components/node/node--speaker';
+import NodeHeadPhone from '../components/node/node--headphone';
 
-const RESOURCE_TYPES = ["node--page", "node--article", "node--earphone"]
+const RESOURCE_TYPES = ["node--page", "node--article", "node--earphone", "node--speaker", "node--headphone"]
 
 interface NodePageProps {
   resource: DrupalNode
@@ -26,6 +28,10 @@ export default function NodePage({ resource }: NodePageProps) {
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} />}
       {resource.type === "node--earphone" && <NodeEarphone node={resource} />}
+      {resource.type === "node--speaker" && <NodeSpeaker node={resource} />}
+      {resource.type === "node--headphone" && <NodeHeadPhone node={resource} />}
+
+
 
     </Layout>
   )
@@ -57,9 +63,18 @@ export async function getStaticProps(context): Promise<GetStaticPropsResult<Node
     }
   }
 
-  if (type === "node--earphone") {
+  if (type === "node--earphone" || type === "node--speaker" ||  type === "node--headphone") {
     params = {
-      include: "field_product_header,field_product_header.field_image",
+      "filter[status]": 1,
+      include:` 
+      field_product_header,
+      field_product_header.field_image,
+      field_general_paragraph.field_image,
+      field_product_gallery.field_gallery_image,
+      field_in_the_box,
+      field_product_category_list.field_product_category_child_ele.field_category_image,
+      field_products_also_like.field_also_like_paragraph_elemen.field_you_also_like_image
+    `
     }
   }
 
